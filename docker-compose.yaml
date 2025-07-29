@@ -1,0 +1,47 @@
+version: "1.0"
+
+services:
+  frontend:
+    image: pong-frontend:v1.1
+    container_name: pong-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - backend
+    networks:
+      - pongnet
+
+  backend:
+    image: pong-backend:v1.1
+    container_name: pong-backend
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - db
+    networks:
+      - pongnet
+    command: sh -c "npx prisma db push && node index.js"
+
+  db:
+    image: mysql:8.3
+    container_name: pong-mysql
+    restart: unless-stopped
+    env_file:
+      - ./db/.env
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - pongnet
+
+networks:
+  pongnet:
+    driver: bridge
+
+volumes:
+  db_data:
