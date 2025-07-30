@@ -1,21 +1,23 @@
-version: "1.0"
-
 services:
   frontend:
-    image: pong-frontend:v1.1
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: /api
     container_name: pong-frontend
     restart: unless-stopped
     ports:
-      - "3000:3000"
-    env_file:
-      - ./frontend/.env
+      - "3000:80"
     depends_on:
       - backend
     networks:
       - pongnet
 
   backend:
-    image: pong-backend:v1.1
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: pong-backend
     restart: unless-stopped
     ports:
