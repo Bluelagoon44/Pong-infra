@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout infra repo
-        uses: checkout@v6.0.1
+        uses: actions/checkout@v6.0.1
 
       - name: Setup SSH
         run: |
