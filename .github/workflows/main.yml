@@ -1,0 +1,50 @@
+name: Deploy to VPS
+
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: 'Who triggered the deploy'
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout infra repo
+        uses: checkout@v6.0.1
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy on VPS
+        run: |
+          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+            set -e
+
+            cd /srv/pong
+
+            echo "🚀 Deploy triggered by: ${{ github.event.inputs.source }}"
+
+            if [ "${{ github.event.inputs.source }}" = "frontend" ]; then
+              echo "🔄 Updating frontend..."
+              rm -rf frontend
+              git pull origin main
+            fi
+
+            if [ "${{ github.event.inputs.source }}" = "backend" ]; then
+              echo "🔄 Updating backend..."
+              git pull origin main
+            fi
+
+            echo "🐳 Docker compose build & up"
+            docker compose up -d --build
+
+            echo "✅ Deployment finished"
+          EOF
