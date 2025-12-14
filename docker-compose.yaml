@@ -28,7 +28,7 @@ services:
       - db
     networks:
       - pongnet
-    command: sh -c "npx prisma db push && node index.js"
+    command: sh -c "npx prisma db push && node app.js"
 
   db:
     image: mysql:8.3
