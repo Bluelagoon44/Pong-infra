@@ -31,7 +31,7 @@ jobs:
           ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
             set -e
 
-            cd /srv/pong
+            cd pong
 
             echo "🚀 Deploy triggered by: ${{ github.event.inputs.source }}"
 
