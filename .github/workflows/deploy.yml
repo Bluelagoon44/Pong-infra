@@ -22,7 +22,10 @@ jobs:
           echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
-
+      - name: Debug VPS host
+        run: |
+          echo "USER=${{ secrets.VPS_USER }}"
+          echo "HOST=${{ secrets.VPS_HOST }}"
       - name: Deploy on VPS
         run: |
           ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
@@ -34,7 +37,6 @@ jobs:
 
             if [ "${{ github.event.inputs.source }}" = "frontend" ]; then
               echo "🔄 Updating frontend..."
-              rm -rf frontend
               git pull origin main
             fi
 
