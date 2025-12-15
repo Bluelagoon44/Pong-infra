@@ -37,18 +37,20 @@ jobs:
 
             if [ "${{ github.event.inputs.source }}" = "frontend" ]; then
               echo "🔄 Updating frontend..."
+              cd frontend
               git pull origin main
+              cd ..
             fi
 
             if [ "${{ github.event.inputs.source }}" = "backend" ]; then
               echo "🔄 Updating backend..."
+              cd backend
               git pull origin main
+              cd..
             fi
 
             echo "🐳 Docker compose build & up"
-            docker compose down
-            docker compose build --no-cache
-            docker compose up -d
+            docker compose up -d --build
 
             echo "✅ Deployment finished"
           EOF
