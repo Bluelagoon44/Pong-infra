@@ -3,12 +3,12 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://backend:4000/api
     container_name: pong-frontend
     restart: unless-stopped
     ports:
       - "3000:3000"
-    env_file:
-      - ./frontend/.env
     depends_on:
       - backend
     networks:
