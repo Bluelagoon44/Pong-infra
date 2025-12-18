@@ -46,7 +46,7 @@ jobs:
               echo "🔄 Updating backend..."
               cd backend
               git pull origin main
-              cd..
+              cd ..
             fi
 
             echo "🐳 Docker compose build & up"
