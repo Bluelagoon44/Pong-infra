@@ -50,7 +50,7 @@ jobs:
             fi
 
             echo "🐳 Docker compose build & up"
-            docker compose up -d --build
+            sudo docker compose up -d --build
 
             echo "✅ Deployment finished"
           EOF
